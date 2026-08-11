@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install project
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e .
+      - name: Static and unit checks
+        run: |
+          python -m compileall -q src scripts orchestration
+          pytest -q
+      - name: End-to-end local pipeline
+        run: |
+          python scripts/demo_pipeline.py --ingest-date 2026-08-10 --patients 300 --encounters 1200
+      - name: Upload verification artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-artifacts
+          path: artifacts/
+          if-no-files-found: ignore
