@@ -1,0 +1,62 @@
+Total Encounters =
+COUNTROWS ( fct_encounters )
+
+Completed Encounters =
+CALCULATE (
+    [Total Encounters],
+    fct_encounters[encounter_status] = "completed"
+)
+
+No Show Encounters =
+CALCULATE (
+    [Total Encounters],
+    fct_encounters[encounter_status] = "no_show"
+)
+
+No Show Rate =
+DIVIDE ( [No Show Encounters], [Total Encounters] )
+
+Completed Care Hours =
+DIVIDE ( SUM ( fct_encounters[actual_duration_minutes] ), 60 )
+
+Billed Amount =
+SUM ( fct_encounters[billed_amount] )
+
+Allowed Amount =
+SUM ( fct_encounters[allowed_amount] )
+
+Reimbursement Amount =
+SUM ( fct_encounters[reimbursement_amount] )
+
+Outstanding Amount =
+SUM ( fct_encounters[outstanding_amount] )
+
+Reimbursement Rate =
+DIVIDE ( [Reimbursement Amount], [Allowed Amount] )
+
+Denied Claims =
+CALCULATE (
+    COUNTROWS ( fct_encounters ),
+    fct_encounters[claim_status] = "denied"
+)
+
+Submitted Claims =
+CALCULATE (
+    COUNTROWS ( fct_encounters ),
+    fct_encounters[claim_status] <> "not_submitted"
+)
+
+Denial Rate =
+DIVIDE ( [Denied Claims], [Submitted Claims] )
+
+Referrals =
+COUNTROWS ( fct_referrals )
+
+Intake Scheduled =
+SUM ( fct_referrals[intake_scheduled_flag] )
+
+Converted Referrals =
+SUM ( fct_referrals[converted_flag] )
+
+Referral Conversion Rate =
+DIVIDE ( [Converted Referrals], [Referrals] )
