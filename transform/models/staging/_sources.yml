@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: landing
+    schema: landing
+    tables:
+      - name: clinical_patients
+      - name: clinical_providers
+      - name: clinical_clinics
+      - name: clinical_encounters
+      - name: crm_patient_profile_history
+      - name: crm_referrals
+      - name: finance_payers
+      - name: finance_claims

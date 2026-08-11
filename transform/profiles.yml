@@ -1,0 +1,7 @@
+clinic_ops:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../warehouse/clinic_ops.duckdb
+      threads: 4
