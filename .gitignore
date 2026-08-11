@@ -24,3 +24,6 @@ transform/dbt_packages/
 
 .airflow/
 .airflow-venv/
+
+*.egg-info/
+transform/.user.yml
