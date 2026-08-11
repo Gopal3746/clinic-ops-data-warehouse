@@ -1,0 +1,89 @@
+version: 2
+
+models:
+  - name: dim_patient
+    description: SCD Type 2 patient profile dimension.
+    columns:
+      - name: patient_key
+        data_tests: [unique, not_null]
+      - name: patient_id
+        data_tests: [not_null]
+      - name: effective_from
+        data_tests: [not_null]
+
+  - name: dim_provider
+    columns:
+      - name: provider_key
+        data_tests: [unique, not_null]
+      - name: provider_id
+        data_tests: [unique, not_null]
+
+  - name: dim_clinic_location
+    columns:
+      - name: clinic_key
+        data_tests: [unique, not_null]
+      - name: clinic_id
+        data_tests: [unique, not_null]
+
+  - name: dim_payer
+    columns:
+      - name: payer_key
+        data_tests: [unique, not_null]
+      - name: payer_id
+        data_tests: [unique, not_null]
+
+  - name: dim_date
+    columns:
+      - name: date_key
+        data_tests: [unique, not_null]
+
+  - name: fct_encounters
+    description: One row per encounter/session.
+    columns:
+      - name: encounter_key
+        data_tests: [unique, not_null]
+      - name: encounter_id
+        data_tests: [unique, not_null]
+      - name: patient_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_patient')
+                field: patient_key
+      - name: provider_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_provider')
+                field: provider_key
+      - name: clinic_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_clinic_location')
+                field: clinic_key
+      - name: payer_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_payer')
+                field: payer_key
+      - name: encounter_date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+
+  - name: fct_referrals
+    description: One row per referral.
+    columns:
+      - name: referral_key
+        data_tests: [unique, not_null]
+      - name: referral_id
+        data_tests: [unique, not_null]
